@@ -1,3 +1,8 @@
+// heroku
+// change dbUrl
+// git add, git commit -m "", git push heroku master
+// heroku logs --tail (to show errors)
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -164,9 +169,5 @@ app.listen(port, () => {
 });
 
 // Possible fixes
-// require image using Joi
-// limiting file size and number (section 54, video 535)
-// making sure images all have same size using cloudinary
-// crop pictures to have same height on campground and show page usind cloudinary image transformation api
-// set up error handling if geo data not found -> flash message & show which location?
-// add infinite scroll: https://www.udemy.com/course/the-web-developer-bootcamp/learn/lecture/22348108#questions/13516294
+// add pagination on button click at bottom of page
+// add infinite scroll: https://stackoverflow.com/questions/29016668/infinite-scrolling-on-post/29021642#29021642

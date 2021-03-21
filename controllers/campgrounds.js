@@ -14,11 +14,32 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createCampground = async (req, res) => {
+  // problem: this only runs after upload to cloudinary
+  if (!req.files.length) {
+    req.flash(
+      'error',
+      'No campground created. You need to add at least one image'
+    );
+    return res.redirect(`/campgrounds/new`);
+  }
+  if (req.files.length > 2) {
+    req.flash('error', 'No campground created. Maximum amount of 10 images.');
+    return res.redirect(`/campgrounds/new`);
+  }
   const geoData = await geocoder
     .forwardGeocode({ query: req.body.campground.location, limit: 1 })
     .send();
   const campground = new Campground(req.body.campground);
-  campground.geometry = geoData.body.features[0].geometry;
+  if (!geoData.body.features.length) {
+    req.flash('error', 'Location could not be found');
+    campground.geometry = {
+      type: 'Point',
+      coordinates: [-97.9222112121185, 39.3812661305678],
+    };
+    campground.location = 'United States';
+  } else {
+    campground.geometry = geoData.body.features[0].geometry;
+  }
   campground.images = req.files.map(f => ({
     url: f.path,
     filename: f.filename,
@@ -51,7 +72,7 @@ module.exports.renderEditForm = async (req, res) => {
 };
 
 module.exports.updateCampground = async (req, res) => {
-  const geoData = await geocoder
+  let geoData = await geocoder
     .forwardGeocode({ query: req.body.campground.location, limit: 1 })
     .send();
   const { id } = req.params;
@@ -63,15 +84,37 @@ module.exports.updateCampground = async (req, res) => {
     filename: f.filename,
   }));
   campground.images.push(...imgs);
-  campground.geometry = geoData.body.features[0].geometry;
+  if (!geoData.body.features.length) {
+    req.flash('error', 'Location could not be found');
+    campground.geometry = {
+      type: 'Point',
+      coordinates: [-97.9222112121185, 39.3812661305678],
+    };
+    campground.location = 'United States';
+  } else {
+    campground.geometry = geoData.body.features[0].geometry;
+  }
   await campground.save();
   if (req.body.deleteImages) {
-    for (let filename of req.body.deleteImages) {
-      await cloudinary.uploader.destroy(filename);
+    if (req.body.deleteImages.length === campground.images.length) {
+      req.flash(
+        'error',
+        'Image(s) not deleted. Campground needs to have at least one image!'
+      );
+      return res.redirect(`/campgrounds/${campground._id}/edit`);
+    } else {
+      for (let filename of req.body.deleteImages) {
+        if (
+          filename !== 'Seeds/pexels-cottonbro-5358788_rcmfz0' &&
+          filename !== 'Seeds/pexels-cottonbro-5364783_v78esu'
+        ) {
+          await cloudinary.uploader.destroy(filename);
+        }
+      }
+      await campground.updateOne({
+        $pull: { images: { filename: { $in: req.body.deleteImages } } },
+      });
     }
-    await campground.updateOne({
-      $pull: { images: { filename: { $in: req.body.deleteImages } } },
-    });
   }
   req.flash('success', 'Successfully updated campground');
   res.redirect(`/campgrounds/${campground._id}`);
@@ -79,6 +122,16 @@ module.exports.updateCampground = async (req, res) => {
 
 module.exports.deleteCampground = async (req, res) => {
   const { id } = req.params;
+  const campground = await Campground.findById(id);
+  const images = campground.images;
+  for (let image of images) {
+    if (
+      image.filename !== 'Seeds/pexels-cottonbro-5358788_rcmfz0' &&
+      image.filename !== 'Seeds/pexels-cottonbro-5364783_v78esu'
+    ) {
+      await cloudinary.uploader.destroy(image.filename);
+    }
+  }
   await Campground.findByIdAndDelete(id);
   req.flash('success', 'Successfully deleted campground');
   res.redirect('/campgrounds');

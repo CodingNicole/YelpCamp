@@ -3,6 +3,9 @@ const router = express.Router();
 const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
+const memory = multer.memoryStorage;
+const memoryUpload = multer({ memory });
+// const upload = multer({ storage, limits: {fileSize: 5*1000*1000} });
 
 const campgrounds = require('../controllers/campgrounds');
 const catchAsync = require('../utils/catchAsync');

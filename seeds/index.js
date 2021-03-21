@@ -41,13 +41,13 @@ const seedDB = async () => {
       images: [
         {
           url:
-            'https://res.cloudinary.com/dija9nq32/image/upload/v1614442033/YelpCamp/di4boseztqrmajqopzop.jpg',
-          filename: 'YelpCamp/di4boseztqrmajqopzop',
+            'https://res.cloudinary.com/dija9nq32/image/upload/v1616233939/Seeds/pexels-cottonbro-5358788_rcmfz0.jpg',
+          filename: 'Seeds/pexels-cottonbro-5358788_rcmfz0',
         },
         {
           url:
-            'https://res.cloudinary.com/dija9nq32/image/upload/v1614443276/YelpCamp/axczpyju1wdgpeqizbn9.jpg',
-          filename: 'YelpCamp/tpcioxese1yl80qmqzyw',
+            'https://res.cloudinary.com/dija9nq32/image/upload/v1616234605/Seeds/pexels-cottonbro-5364783_v78esu.jpg',
+          filename: 'Seeds/pexels-cottonbro-5364783_v78esu',
         },
       ],
     });

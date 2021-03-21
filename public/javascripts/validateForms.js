@@ -14,6 +14,17 @@
           event.stopPropagation();
         }
 
+        // const images = document.querySelector('#image');
+        // if (images.files.length > 2) {
+        //   console.log('too many files');
+        //   images.classList.add('is-invalid');
+        // }
+        // for (let file of images.files) {
+        //   if (file.size > 1000 * 1000 * 5) {
+        //     console.log('file is too big');
+        //   }
+        // }
+
         form.classList.add('was-validated');
       },
       false

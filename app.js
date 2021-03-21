@@ -1,6 +1,7 @@
 // heroku
 // change dbUrl
 // git add, git commit -m "", git push heroku master
+// https://enigmatic-ridge-52345.herokuapp.com/
 // heroku logs --tail (to show errors)
 
 if (process.env.NODE_ENV !== 'production') {
@@ -103,8 +104,7 @@ const styleSrcUrls = [
 ];
 const connectSrcUrls = [
   'https://api.mapbox.com/',
-  'https://a.tiles.mapbox.com/',
-  'https://b.tiles.mapbox.com/',
+  'https://*.tiles.mapbox.com/',
   'https://events.mapbox.com/',
 ];
 const fontSrcUrls = [];
@@ -170,4 +170,6 @@ app.listen(port, () => {
 
 // Possible fixes
 // add pagination on button click at bottom of page
-// add infinite scroll: https://stackoverflow.com/questions/29016668/infinite-scrolling-on-post/29021642#29021642
+// https://www.npmjs.com/package/mongoose-paginate-v2
+
+// deploy using GitHub so that I also have version control

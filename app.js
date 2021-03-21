@@ -173,6 +173,4 @@ app.listen(port, () => {
 // add pagination on button click at bottom of page
 // https://www.npmjs.com/package/mongoose-paginate-v2
 
-// deploy using GitHub so that I also have version control
-
 // map not showing on mobile: https://www.udemy.com/course/the-web-developer-bootcamp/learn/lecture/22361228#questions/13402628

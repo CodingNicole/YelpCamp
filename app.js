@@ -1,6 +1,6 @@
 // heroku
 // change dbUrl
-// git add, git commit -m "", git push heroku master
+// git add ., git commit -m "", git push heroku master
 // https://enigmatic-ridge-52345.herokuapp.com/
 // heroku logs --tail (to show errors)
 
